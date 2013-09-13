@@ -24,6 +24,9 @@ class StatusSearchCheck(serverPath: String, productServerPath: String) extends S
 
     val data = new ArrayBuffer[StatusSearchModel]
 
+    data += new StatusSearchModel()
+
+
 
     get(data, 1, 1000)
 
@@ -31,9 +34,14 @@ class StatusSearchCheck(serverPath: String, productServerPath: String) extends S
     //    for (d <- data)
     //      println(d.pinyin)
 
-    val a = (data)
-    check(a)
-    saveExec(a)
+    //data.append(new StatusSearchModel("", "这ge也能搜到ma？", 100, 10))
+
+
+    val checkedData = check(data)
+
+
+
+    saveExec(data, checkedData)
   }
 
   def get(data: ArrayBuffer[StatusSearchModel], startNum: Int, rows: Int) {
@@ -57,35 +65,59 @@ class StatusSearchCheck(serverPath: String, productServerPath: String) extends S
     }
   }
 
-  def check(data: ArrayBuffer[StatusSearchModel]) {
-
-
+  def check(data: ArrayBuffer[StatusSearchModel]): ArrayBuffer[StatusSearchModel] = {
     val start = 0
     val rows = 0
 
+    var checkedData = new ArrayBuffer[StatusSearchModel]
     for (d <- data) {
-      val request = new QueryRequest(writerType = WriterType.JavaBinary, query = Query("text:" + d.word), startRow = StartRow(start = start), maximumRowsReturned = MaximumRowsReturned(rows = rows))
-      val response = productClient.doQuery(request)
-      val numFound = response.response.numFound
+      var numFound = 0
+      if (!d.word.isEmpty) {
+        val request = new QueryRequest(writerType = WriterType.JavaBinary, query = Query("text:" + d.word), startRow = StartRow(start = start), maximumRowsReturned = MaximumRowsReturned(rows = rows))
+        val response = productClient.doQuery(request)
+        numFound = response.response.numFound
+      }
 
-      println("word:" + d.word + ",numfound:" + numFound)
+
+      //      if (numFound == 0)
+      //        println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>word:" + d.word + ",numfound:" + numFound)
+
+      //println("word:" + d.word + ",numfound:" + numFound)
+
       d.search_result = numFound
+
+      //checkedData.append()
+
+      if (numFound == 0) {
+        println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>word:" + d.word + ",numfound:" + d.search_result)
+
+        checkedData.append(d)
+      }
+
+
+
+      //println("<<<<d:", checkedData.length)
+
     }
+
+    checkedData
   }
 
 
-  def saveExec(data: ArrayBuffer[StatusSearchModel]) {
+  def saveExec(orgData: ArrayBuffer[StatusSearchModel], checked: ArrayBuffer[StatusSearchModel]) {
     val org = "output/org/"
     val zero = "output/zero/"
     val have = "output/have/"
 
-    save(data.takeWhile(v => v.search_result == 0), zero)
-    save(data.takeWhile(v => v.search_result > 0), have)
-    save(data, org)
+    save(checked, zero)
+    save(orgData -- checked, have)
+    save(orgData, org)
 
   }
 
   def save(data: ArrayBuffer[StatusSearchModel], fileParentPath: String) {
+
+    println("datacount:" + data.length + ",path:" + fileParentPath)
     val fileName = () => {
       val dt = new java.util.Date(System.currentTimeMillis())
       val fmt = new SimpleDateFormat("yyyyMMddHHmmss")
@@ -201,12 +233,12 @@ class PageModel(page: Int, size: Int, count: Int, pageCount: Int) {
   }
 }
 
-case class StatusSearchModel(
-                              var pinyin: String = StringUtils.Empty,
-                              var word: String = StringUtils.Empty,
-                              var search_count: Int = 0,
-                              var search_result: Int = 0
-                              ) {
+class StatusSearchModel(
+                         var pinyin: String = StringUtils.Empty,
+                         var word: String = StringUtils.Empty,
+                         var search_count: Int = 0,
+                         var search_result: Int = 0
+                         ) {
   def this() = {
     this(StringUtils.Empty, StringUtils.Empty, 0, 0)
   }
