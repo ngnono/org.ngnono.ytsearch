@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="SBT: com.github.seratch:scalikesolr_2.10:4.3.1">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.ivy2/cache/com.github.seratch/scalikesolr_2.10/jars/scalikesolr_2.10-4.3.1.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.ivy2/cache/com.github.seratch/scalikesolr_2.10/docs/scalikesolr_2.10-4.3.1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.ivy2/cache/com.github.seratch/scalikesolr_2.10/srcs/scalikesolr_2.10-4.3.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
