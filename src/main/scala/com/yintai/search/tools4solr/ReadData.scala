@@ -77,9 +77,11 @@ class StatusSearchCheck(serverPath: String, productServerPath: String) extends S
   def saveExec(data: ArrayBuffer[StatusSearchModel]) {
     val org = "output/org/"
     val zero = "output/zero/"
+    val have = "output/have/"
 
     save(data.takeWhile(v => v.search_result == 0), zero)
-    save(data.takeWhile(v => v.search_result > 0), org)
+    save(data.takeWhile(v => v.search_result > 0), have)
+    save(data, org)
 
   }
 

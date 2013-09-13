@@ -1,6 +1,7 @@
 bin/
 project/
 target/
+output/
 .cache
 .classpath
 .project
