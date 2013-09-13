@@ -39,6 +39,8 @@
     <orderEntry type="library" name="SBT: commons-codec:commons-codec:1.7" level="project" />
     <orderEntry type="library" name="SBT: org.apache.httpcomponents:httpmime:4.2.3" level="project" />
     <orderEntry type="library" name="SBT: org.codehaus.woodstox:wstx-asl:3.2.7" level="project" />
+    <orderEntry type="library" name="SBT: org.rogach:scallop_2.10:0.9.4" level="project" />
+    <orderEntry type="library" name="SBT: org.scala-lang:scala-reflect:2.10.1" level="project" />
   </component>
 </module>
 

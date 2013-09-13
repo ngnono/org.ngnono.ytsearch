@@ -1,6 +1,7 @@
 import com.github.seratch.scalikesolr._
 import com.yintai.search.tools4solr.StatusSearchCheck
 import java.net.URL
+import org.rogach.scallop.ScallopConf
 
 
 /**
@@ -13,7 +14,10 @@ import java.net.URL
 object Program {
   def main(args: Array[String]) {
     //    helloSolr()
-    val run = new StatusSearchCheck("http://10.32.34.117:8080/solr/searchstatics","http://10.32.34.117:8080/solr/product")
+    val conf = new Conf(args)
+    println(conf.host())
+    val host = conf.host()
+    val run = new StatusSearchCheck(host + "/solr/searchstatics", host + "/solr/product")
     run.run()
   }
 
@@ -34,4 +38,9 @@ object Program {
     }
   }
 
+}
+
+
+class Conf(arguments: Seq[String]) extends ScallopConf(arguments) {
+  val host = opt[String](required = true,descr = "input solr host e:http://10.32.34.117:8080")
 }
