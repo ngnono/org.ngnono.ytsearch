@@ -40,8 +40,29 @@ class StatusSearchCheck(serverPath: String, productServerPath: String) extends S
     val checkedData = check(data)
 
 
-
     saveExec(data, checkedData)
+
+    if (data.length == checkedData.length) {
+      println("org data.length = zero data.length,del stop.....")
+    }
+    else if (checkedData.length == 0) {
+      println("zero data.length=0")
+    }
+    else {
+      del(checkedData)
+    }
+  }
+
+
+  def del(data: ArrayBuffer[StatusSearchModel]) {
+
+    println("del zero data.length=" + data.length)
+    val list = data.map(v => v.word).toList
+
+    val request = new DeleteRequest(uniqueKeysToDelete = list, writerType = WriterType.JavaBinary)
+    val response = client.doDeleteDocuments(request)
+    client.doCommit(new UpdateRequest())
+
   }
 
   def get(data: ArrayBuffer[StatusSearchModel], startNum: Int, rows: Int) {
