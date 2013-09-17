@@ -16,8 +16,15 @@ object Program {
     //    helloSolr()
     val conf = new Conf(args)
     println(conf.host())
+    println(conf.del())
+
     val host = conf.host()
-    val run = new StatusSearchCheck(host + "/solr/searchstatics", host + "/solr/product")
+    val run = new StatusSearchCheck(host + "/solr/searchstatics", host + "/solr/product",
+      conf.del() match {
+        case "true" => true
+        case "TRUE" => true
+        case _ => false
+      })
     run.run()
   }
 
@@ -42,5 +49,6 @@ object Program {
 
 
 class Conf(arguments: Seq[String]) extends ScallopConf(arguments) {
-  val host = opt[String](required = true,descr = "input solr host e:http://10.32.34.117:8080")
+  val host = opt[String](required = true, descr = "input solr host e:http://10.32.34.117:8080")
+  val del = opt[String](required = false, descr = "是否清理0结果的数据 true or false default:false",default = Option[String](""))
 }

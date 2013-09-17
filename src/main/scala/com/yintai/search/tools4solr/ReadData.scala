@@ -16,9 +16,10 @@ import java.text.SimpleDateFormat
  * Time: 下午4:24
  * To change this template use File | Settings | File Templates.
  */
-class StatusSearchCheck(serverPath: String, productServerPath: String) extends SolrRequest(serverPath) {
+class StatusSearchCheck(serverPath: String, productServerPath: String, isClearData: Boolean) extends SolrRequest(serverPath) {
 
   val productClient = Solr.httpServer(new URL(productServerPath)).newClient()
+  val isDel = isClearData
 
   def run() {
 
@@ -49,7 +50,13 @@ class StatusSearchCheck(serverPath: String, productServerPath: String) extends S
       println("zero data.length=0")
     }
     else {
-      del(checkedData)
+      if (isDel) {
+        del(checkedData)
+      }
+      else {
+        printf("don't clear zero data")
+      }
+
     }
   }
 
