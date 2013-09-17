@@ -5,7 +5,7 @@ import java.net.URL
 import com.github.seratch.scalikesolr.request.query.{MaximumRowsReturned, StartRow, Query}
 import scala.beans.BeanProperty
 import scala.collection.mutable.ArrayBuffer
-import java.io.{PrintWriter, FileWriter, File}
+import java.io._
 import java.text.SimpleDateFormat
 
 
@@ -30,7 +30,7 @@ class StatusSearchCheck(serverPath: String, productServerPath: String) extends S
 
     get(data, 1, 1000)
 
-    //    println(data.length)
+    println(data.length)
     //    for (d <- data)
     //      println(d.pinyin)
 
@@ -39,7 +39,7 @@ class StatusSearchCheck(serverPath: String, productServerPath: String) extends S
 
     val checkedData = check(data)
 
-
+    println(checkedData.length)
     saveExec(data, checkedData)
 
     if (data.length == checkedData.length) {
@@ -146,7 +146,7 @@ class StatusSearchCheck(serverPath: String, productServerPath: String) extends S
       fmt.format(dt) + ".txt"
     }
 
-    val filePath = FileUtil.getCurrentDirectory + "/" + fileParentPath
+    val filePath = FileUtil.getCurrentDirectory + "/src/main/resources/" + fileParentPath
     val fileFullName = filePath + fileName()
 
     println(fileFullName)
@@ -194,15 +194,15 @@ object FileUtil {
 
   }
 
-  def writeToFile(fileName: String, data: String) = using(new FileWriter(fileName)) {
+  def writeToFile(fileName: String, data: String) = using(new OutputStreamWriter(new FileOutputStream(fileName), "UTF-8")) {
     fileWriter => fileWriter.write(data)
   }
 
-  def appendToFile(fileName: String, textData: String) = using(new FileWriter(fileName, true)) {
-    fileWriter => using(new PrintWriter(fileWriter)) {
-      printWriter => printWriter.println(textData)
-    }
-  }
+  //  def appendToFile(fileName: String, textData: String) = using(new FileWriter(fileName, true)) {
+  //    fileWriter => using(new PrintWriter(fileWriter)) {
+  //      printWriter => printWriter.println(textData)
+  //    }
+  //  }
 
   def existsFile(fileName: String): Boolean = {
     val f = new File(fileName)
